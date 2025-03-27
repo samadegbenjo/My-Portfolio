@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Samuel Adegbenjo - Portfolio{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+    {% block additional_css %}{% endblock %}
+</head>
+<body class="bg-dark-section">
+    <!-- Particles background - positioned absolutely to cover entire viewport -->
+    <div id="particles-js" class="particles-background"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Samuel Adegbenjo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/experience"><i class="fas fa-briefcase me-1"></i> Experience</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/education"><i class="fas fa-graduation-cap me-1"></i> Education</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/skills"><i class="fas fa-code me-1"></i> Skills</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/projects"><i class="fas fa-project-diagram me-1"></i> Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact"><i class="fas fa-envelope me-1"></i> Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="content position-relative">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-5 position-relative">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Samuel Adegbenjo</h5>
+                    <p>Information Technology Professional</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="social-links">
+                        <a href="{{ personal_info.social_links.linkedin }}" target="_blank"><i class="fab fa-linkedin fa-2x"></i></a>
+                        <a href="{{ personal_info.social_links.github }}" target="_blank"><i class="fab fa-github fa-2x"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <p class="mb-0">&copy; 2025 Samuel Adegbenjo. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="floating-action-btn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="{{ url_for('static', filename='js/particles-config.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <!-- Additional typing animation -->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script>
+        // Initialize typed.js on pages with typing-animation element
+        document.addEventListener('DOMContentLoaded', function() {
+            const typingElement = document.querySelector('.typing-animation');
+            if (typingElement) {
+                new Typed(typingElement, {
+                    strings: ['Information Security', 'Data Analytics', 'Artificial Intelligence', 'Machine Learning', 'Cloud Computing'],
+                    typeSpeed: 50,
+                    backSpeed: 30,
+                    backDelay: 1500,
+                    loop: true
+                });
+            }
+        });
+    </script>
+    
+    {% block additional_js %}{% endblock %}
+</body>
+</html>

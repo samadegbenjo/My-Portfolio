@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Education - Samuel Adegbenjo{% endblock %}
+
+{% block content %}
+<section class="education py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">My Education</h2>
+        <p class="text-center mb-5">Here is an overview of my academic background and certifications:</p>
+        <div class="row">
+            {% for edu in education %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ edu.degree }}</h5>
+                        <h6 class="card-subtitle mb-2 text-white">{{ edu.institution }}</h6>
+                        <p class="card-text text-white small">{{ edu.year }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <h3 class="text-center mt-5">Certifications</h3>
+        <div class="row mt-4">
+            {% for cert in certifications %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ cert.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-white">{{ cert.issuer }}</h6>
+                        <p class="card-text text-white small">{{ cert.status }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <h3 class="text-center mt-5">Key Courses</h3>
+        <div class="row mt-4">
+            {% for course in key_courses %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.name }}</h5>
+                        <p class="card-text">{{ course.description }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Experience - Samuel Adegbenjo{% endblock %}
+
+{% block content %}
+<section class="experience-header py-5 bg-primary text-white">
+    <div class="container">
+        <h1 class="text-center">Professional Experience</h1>
+        <p class="text-center lead">My journey through information security, data analytics, and research</p>
+    </div>
+</section>
+
+<section class="experience-timeline py-5">
+    <div class="container">
+        <div class="timeline">
+            {% for job in experience %}
+                <div class="timeline-item card mb-4 animate-on-scroll">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ job.role }}</h3>
+                        <h5 class="card-subtitle mb-2 text-muted">{{ job.company }}</h5>
+                        <p class="card-text text-muted mb-3">{{ job.period }}</p>
+                        <h6 class="card-subtitle mb-2">Key Accomplishments:</h6>
+                        <ul class="list-unstyled">
+                            {% for achievement in job.achievements %}
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> {{ achievement }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="skills-highlight py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Skills Developed</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="lead text-center mb-4">Throughout my professional journey, I've developed the following key skills:</p>
+                        <div class="row text-center">
+                            <div class="col-md-4 mb-3">
+                                <i class="fas fa-shield-alt fa-3x text-primary mb-2"></i>
+                                <h5>Information Security</h5>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <i class="fas fa-chart-line fa-3x text-primary mb-2"></i>
+                                <h5>Data Analytics</h5>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <i class="fas fa-code fa-3x text-primary mb-2"></i>
+                                <h5>Programming</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics Dashboard - Samuel Adegbenjo{% endblock %}
+
+{% block content %}
+<section class="dashboard py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Portfolio Analytics Dashboard</h2>
+        <p class="text-center mb-5">Real-time analytics for my portfolio website</p>
+        
+        <div class="row">
+            <!-- Page Views -->
+            <div class="col-lg-8 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Page Views</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="pageViewsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Visitor Locations -->
+            <div class="col-lg-4 mb-4">
+                <div class="card dashboard-card h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0">Visitor Locations</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="locationChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Device Types -->
+            <div class="col-lg-4 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Device Types</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="deviceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Real-time Visitors -->
+            <div class="col-lg-4 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Current Visitors</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="display-1 text-primary" id="current-visitors">0</div>
+                        <p class="text-muted">Active on the site right now</p>
+                        <div class="progress mt-3" style="height: 10px;">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" id="visitor-progress"></div>
+                        </div>
+                        <p class="small text-muted mt-2">Percentage of daily average</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Last Updated -->
+            <div class="col-lg-4 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Data Updates</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-2"><i class="fas fa-clock text-secondary me-2"></i> Last updated: <span id="last-update">Loading...</span></p>
+                        <p class="mb-2"><i class="fas fa-refresh text-secondary me-2"></i> Refresh rate: <span>10 seconds</span></p>
+                        <p class="mb-0"><i class="fas fa-calendar text-secondary me-2"></i> Data period: <span>Last 7 days</span></p>
+                        <div class="d-grid gap-2 mt-3">
+                            <button class="btn btn-primary" id="refresh-data">Refresh Data Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Summary -->
+            <div class="col-lg-4 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Total Visitors: <span id="total-visitors">0</span></p>
+                        <p>Top Page: <span id="top-page">Loading...</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block additional_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let pageViewsChart, locationChart, deviceChart;
+        
+        // Function to update all charts
+        function updateCharts() {
+            fetch('/api/analytics')
+                .then(response => response.json())
+                .then(data => {
+                    // Update timestamp
+                    document.getElementById('last-update').textContent = data.timestamp;
+                    
+                    // Update current visitors
+                    const visitorCount = data.page_views.home / 20; // Just for simulation
+                    document.getElementById('current-visitors').textContent = Math.round(visitorCount);
+                    
+                    const progressPercentage = (visitorCount / 50) * 100; // Assuming 50 is the daily average
+                    document.getElementById('visitor-progress').style.width = `${progressPercentage}%`;
+                    
+                    // Update Page Views Chart
+                    if (pageViewsChart) {
+                        pageViewsChart.data.datasets[0].data = Object.values(data.page_views);
+                        pageViewsChart.update();
+                    } else {
+                        const pageViewsCtx = document.getElementById('pageViewsChart').getContext('2d');
+                        pageViewsChart = new Chart(pageViewsCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: Object.keys(data.page_views).map(key => key.charAt(0).toUpperCase() + key.slice(1)),
+                                datasets: [{
+                                    label: 'Page Views',
+                                    data: Object.values(data.page_views),
+                                    backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                                    borderColor: 'rgba(52, 152, 219, 1)',
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Update Location Chart
+                    if (locationChart) {
+                        locationChart.data.datasets[0].data = Object.values(data.visitor_locations);
+                        locationChart.update();
+                    } else {
+                        const locationCtx = document.getElementById('locationChart').getContext('2d');
+                        locationChart = new Chart(locationCtx, {
+                            type: 'pie',
+                            data: {
+                                labels: Object.keys(data.visitor_locations),
+                                datasets: [{
+                                    data: Object.values(data.visitor_locations),
+                                    backgroundColor: [
+                                        'rgba(52, 152, 219, 0.7)',
+                                        'rgba(46, 204, 113, 0.7)',
+                                        'rgba(155, 89, 182, 0.7)',
+                                        'rgba(241, 196, 15, 0.7)',
+                                        'rgba(230, 126, 34, 0.7)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(52, 152, 219, 1)',
+                                        'rgba(46, 204, 113, 1)',
+                                        'rgba(155, 89, 182, 1)',
+                                        'rgba(241, 196, 15, 1)',
+                                        'rgba(230, 126, 34, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom'
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Update Device Chart
+                    if (deviceChart) {
+                        deviceChart.data.datasets[0].data = Object.values(data.device_types);
+                        deviceChart.update();
+                    } else {
+                        const deviceCtx = document.getElementById('deviceChart').getContext('2d');
+                        deviceChart = new Chart(deviceCtx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: Object.keys(data.device_types),
+                                datasets: [{
+                                    data: Object.values(data.device_types),
+                                    backgroundColor: [
+                                        'rgba(52, 152, 219, 0.7)',
+                                        'rgba(46, 204, 113, 0.7)',
+                                        'rgba(155, 89, 182, 0.7)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(52, 152, 219, 1)',
+                                        'rgba(46, 204, 113, 1)',
+                                        'rgba(155, 89, 182, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                cutout: '70%',
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom'
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    // Update Summary
+                    document.getElementById('total-visitors').textContent = data.total_visitors;
+                    document.getElementById('top-page').textContent = data.top_page;
+                })
+                .catch(error => console.error('Error fetching analytics data:', error));
+        }
+        
+        // Initial charts creation
+        updateCharts();
+        
+        // Refresh charts every 10 seconds
+        setInterval(updateCharts, 10000);
+        
+        // Refresh button action
+        document.getElementById('refresh-data').addEventListener('click', function() {
+            this.disabled = true;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Refreshing...';
+            
+            updateCharts();
+            
+            setTimeout(() => {
+                this.disabled = false;
+                this.innerHTML = 'Refresh Data Now';
+            }, 1000);
+        });
+    });
+</script>
+{% endblock %}

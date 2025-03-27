@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Skills - Samuel Adegbenjo{% endblock %}
+
+{% block content %}
+<section class="skills py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">My Skills</h2>
+        <p class="text-center mb-5">Here is an overview of my technical and business skills:</p>
+        <div class="row">
+            <!-- Programming Skills -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-code me-2"></i>Programming</h5>
+                        <ul class="list-unstyled">
+                            {% for skill in skills.programming %}
+                            <li class="mb-2"><span class="badge bg-primary">{{ skill }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Machine Learning Frameworks -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-brain me-2"></i>Machine Learning</h5>
+                        <ul class="list-unstyled">
+                            {% for skill in skills.ml_frameworks %}
+                            <li class="mb-2"><span class="badge bg-info">{{ skill }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Data Analysis Skills -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-chart-bar me-2"></i>Data Analysis</h5>
+                        <ul class="list-unstyled">
+                            {% for skill in skills.data_analysis %}
+                            <li class="mb-2"><span class="badge bg-success">{{ skill }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Cloud Computing Skills -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-cloud me-2"></i>Cloud Computing</h5>
+                        <ul class="list-unstyled">
+                            {% for skill in skills.cloud_computing %}
+                            <li class="mb-2"><span class="badge bg-warning">{{ skill }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Business Skills -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-briefcase me-2"></i>Business Skills</h5>
+                        <ul class="list-unstyled">
+                            {% for skill in skills.business %}
+                            <li class="mb-2"><span class="badge bg-secondary">{{ skill }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Other Technical Skills -->
+            <div class="col-md-12 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-tools me-2"></i>Other Technical Skills</h5>
+                        <ul class="list-unstyled">
+                            {% for skill in other_technical %}
+                            <li class="mb-2"><span class="badge bg-accent">{{ skill }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
